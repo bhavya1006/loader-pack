@@ -1,0 +1,199 @@
+.lp-spot {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+  transition: opacity 0.8s ease;
+}
+
+.lp-spot.lp-spot-out {
+  opacity: 0;
+}
+
+.lp-spot-dark {
+  background: #050505;
+  color: #fff;
+}
+
+.lp-spot-light {
+  background: #f0f0f0;
+  color: #111;
+}
+
+/* ── Spotlight beam container ── */
+.lp-spot-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.lp-spot-glow.lp-spot-on {
+  opacity: 1;
+}
+
+/* ── Main cone of light ── */
+.lp-spot-glow::before {
+  content: "";
+  position: absolute;
+  /* origin from top-left, large enough to cover viewport */
+  top: -20%;
+  left: -10%;
+  width: 120%;
+  height: 140%;
+  transform-origin: 10% 0%;
+  transform: rotate(-5deg);
+  background: conic-gradient(
+    from 120deg at 10% 0%,
+    transparent 0deg,
+    var(--lp-beam-mid) 15deg,
+    var(--lp-beam-bright) 30deg,
+    var(--lp-beam-mid) 50deg,
+    transparent 65deg
+  );
+  filter: blur(30px);
+  animation: lpBeamSweep 6s ease-in-out infinite alternate;
+}
+
+/* ── Volumetric rays ── */
+.lp-spot-glow::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 120%;
+  height: 140%;
+  transform-origin: 10% 0%;
+  transform: rotate(-5deg);
+  background:
+    conic-gradient(
+      from 118deg at 10% 0%,
+      transparent 0deg,
+      var(--lp-ray) 3deg,
+      transparent 6deg,
+      transparent 12deg,
+      var(--lp-ray) 15deg,
+      transparent 18deg,
+      transparent 24deg,
+      var(--lp-ray) 27deg,
+      transparent 30deg,
+      transparent 36deg,
+      var(--lp-ray) 39deg,
+      transparent 42deg,
+      transparent 48deg,
+      var(--lp-ray) 51deg,
+      transparent 54deg,
+      transparent 60deg,
+      var(--lp-ray) 63deg,
+      transparent 66deg
+    );
+  filter: blur(8px);
+  opacity: 0.5;
+  animation: lpBeamSweep 6s ease-in-out infinite alternate;
+}
+
+/* ── Ambient glow at beam contact area ── */
+.lp-spot-ambient {
+  position: absolute;
+  width: 70%;
+  height: 60%;
+  bottom: 0;
+  left: 10%;
+  border-radius: 50%;
+  background: var(--lp-ambient);
+  filter: blur(80px);
+  opacity: 0;
+  transition: opacity 2s ease 0.3s;
+  pointer-events: none;
+}
+
+.lp-spot-on ~ .lp-spot-ambient,
+.lp-spot-on + * + .lp-spot-ambient {
+  opacity: 1;
+}
+
+/* ── Dark theme colours ── */
+.lp-spot-dark {
+  --lp-beam-bright: rgba(255,255,255,0.14);
+  --lp-beam-mid:    rgba(255,255,255,0.06);
+  --lp-ray:         rgba(255,255,255,0.07);
+  --lp-ambient:     rgba(255,255,255,0.06);
+}
+
+/* ── Light theme colours ── */
+.lp-spot-light {
+  --lp-beam-bright: rgba(0,0,0,0.10);
+  --lp-beam-mid:    rgba(0,0,0,0.04);
+  --lp-ray:         rgba(0,0,0,0.05);
+  --lp-ambient:     rgba(0,0,0,0.04);
+}
+
+/* ── Gentle sway animation ── */
+@keyframes lpBeamSweep {
+  0%   { transform: rotate(-8deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.lp-spot-center {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+/* Name reveal */
+.lp-spot-name {
+  font-size: clamp(2rem, 9vw, 6rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
+}
+
+.lp-spot-name.lp-spot-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Button */
+.lp-spot-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  animation: lpSpotBtn 0.8s ease forwards;
+  position: relative;
+}
+
+.lp-spot-btn::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.lp-spot-btn:hover::after {
+  width: 100%;
+}
+
+@keyframes lpSpotBtn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 0.7; transform: translateY(0); }
+}

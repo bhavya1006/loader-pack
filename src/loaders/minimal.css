@@ -1,0 +1,68 @@
+.lp-minimal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.7s ease;
+}
+
+.lp-minimal.lp-minimal-out {
+  opacity: 0;
+}
+
+.lp-minimal-dark {
+  background: #0a0a0a;
+  color: #e0e0e0;
+}
+
+.lp-minimal-light {
+  background: #fafafa;
+  color: #1a1a1a;
+}
+
+.lp-minimal-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.lp-minimal-name {
+  font-size: clamp(1.8rem, 7vw, 4.5rem);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: lpMinFade 1.2s ease forwards;
+}
+
+@keyframes lpMinFade {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.lp-minimal-btn {
+  background: none;
+  border: 1px solid currentColor;
+  color: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 10px 36px;
+  cursor: pointer;
+  opacity: 0;
+  animation: lpMinFade 0.8s ease 0.1s forwards;
+  transition: background 0.3s, color 0.3s;
+}
+
+.lp-minimal-dark .lp-minimal-btn:hover {
+  background: #e0e0e0;
+  color: #0a0a0a;
+}
+
+.lp-minimal-light .lp-minimal-btn:hover {
+  background: #1a1a1a;
+  color: #fafafa;
+}

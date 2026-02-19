@@ -3,11 +3,18 @@ import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
 import { resolve } from "path";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     react(),
-    dts({ include: ["src"], insertTypesEntry: true }),
+    ...(command === "build"
+      ? [dts({ include: ["src"], insertTypesEntry: true })]
+      : []),
   ],
+
+  // Dev mode: serve the demo app
+  root: command === "serve" ? "demo" : undefined,
+
+  // Build mode: library output
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
@@ -16,7 +23,6 @@ export default defineConfig({
       fileName: "loader-pack",
     },
     rollupOptions: {
-      // Don't bundle React — the consumer provides it
       external: ["react", "react-dom", "react/jsx-runtime"],
       output: {
         globals: {
@@ -26,7 +32,7 @@ export default defineConfig({
         },
       },
     },
-    cssCodeSplit: false, // bundle all CSS into one style.css
-    assetsInlineLimit: 300000, // inline audio files as base64 data URIs
+    cssCodeSplit: false,
+    assetsInlineLimit: 300000,
   },
-});
+}));

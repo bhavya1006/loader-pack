@@ -1,0 +1,354 @@
+/* ═══════════════════════════════════════════
+   GLITCH LOADER — Cyberpunk error aesthetic
+   ═══════════════════════════════════════════ */
+
+/* ── Container ── */
+.lp-gli {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+  font-family: "Courier New", "Fira Mono", monospace;
+  transition: opacity 0.8s ease;
+}
+
+.lp-gli.lp-gli-out {
+  opacity: 0;
+}
+
+/* ── Themes ── */
+.lp-gli-dark {
+  background: #080810;
+  --lp-gli-fg: #d0d0e0;
+  --lp-gli-accent: #a855f7;     /* violet */
+  --lp-gli-accent2: #6366f1;    /* indigo */
+  --lp-gli-accent3: #22d3ee;    /* electric cyan */
+  --lp-gli-name-fill: transparent;
+  --lp-gli-name-stroke: #a855f7;
+  --lp-gli-name-glow: rgba(168, 85, 247, 0.5);
+  --lp-gli-dim: rgba(255,255,255,0.08);
+  --lp-gli-scanline: rgba(0,0,0,0.25);
+  --lp-gli-cat-glow: rgba(168, 85, 247, 0.25);
+}
+
+.lp-gli-light {
+  background: #eeeaf6;
+  --lp-gli-fg: #1a1a2e;
+  --lp-gli-accent: #6d28d9;
+  --lp-gli-accent2: #4338ca;
+  --lp-gli-accent3: #0e7490;
+  --lp-gli-name-fill: transparent;
+  --lp-gli-name-stroke: #5b21b6;
+  --lp-gli-name-glow: rgba(91, 33, 182, 0.3);
+  --lp-gli-dim: rgba(0,0,0,0.06);
+  --lp-gli-scanline: rgba(0,0,0,0.06);
+  --lp-gli-cat-glow: rgba(109, 40, 217, 0.15);
+}
+
+/* ── Scanlines ── */
+.lp-gli-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: repeating-linear-gradient(
+    0deg,
+    var(--lp-gli-scanline) 0px,
+    var(--lp-gli-scanline) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.6;
+  animation: lpGliScanDrift 8s linear infinite;
+}
+
+@keyframes lpGliScanDrift {
+  0%   { background-position-y: 0; }
+  100% { background-position-y: 60px; }
+}
+
+/* ── Noise grain ── */
+.lp-gli-noise {
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.04;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  animation: lpGliNoiseMove 0.5s steps(4) infinite;
+}
+
+@keyframes lpGliNoiseMove {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-2%, -3%); }
+  50%  { transform: translate(1%, 2%); }
+  75%  { transform: translate(-1%, 1%); }
+  100% { transform: translate(2%, -2%); }
+}
+
+/* ── Error log ── */
+.lp-gli-log {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  max-height: 30vh;
+  overflow: hidden;
+  z-index: 5;
+  font-size: clamp(0.55rem, 1.2vw, 0.75rem);
+  letter-spacing: 0.08em;
+  color: var(--lp-gli-accent);
+  opacity: 0.55;
+}
+
+.lp-gli-line {
+  white-space: nowrap;
+  overflow: hidden;
+  animation: lpGliLineIn 0.3s ease forwards;
+  transform: translateX(-20px);
+  opacity: 0;
+  margin-bottom: 2px;
+}
+
+@keyframes lpGliLineIn {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ── Big Glitch Name (outline, not filled) ── */
+.lp-gli-name {
+  position: relative;
+  z-index: 5;
+  font-size: clamp(2.5rem, 12vw, 7rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lp-gli-name-fill);
+  -webkit-text-stroke: 2px var(--lp-gli-name-stroke);
+  paint-order: stroke fill;
+  text-shadow:
+    0 0 8px var(--lp-gli-name-glow),
+    0 0 30px var(--lp-gli-name-glow);
+  animation: lpGliNameIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  margin: 0;
+}
+
+@keyframes lpGliNameIn {
+  0% {
+    opacity: 0;
+    transform: scale(1.2) translateY(20px);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* ── RGB channel-split (::before = cyan, ::after = magenta) ── */
+.lp-gli-name::before,
+.lp-gli-name::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.lp-gli-name::before {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--lp-gli-accent3);
+  z-index: -1;
+  animation: lpGliChannelCyan 3s infinite linear alternate;
+  clip-path: inset(0 0 50% 0);
+}
+
+.lp-gli-name::after {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--lp-gli-accent);
+  z-index: -1;
+  animation: lpGliChannelMagenta 3s infinite linear alternate;
+  clip-path: inset(50% 0 0 0);
+}
+
+@keyframes lpGliChannelCyan {
+  0%   { transform: translate(0); }
+  20%  { transform: translate(-3px, 1px); }
+  40%  { transform: translate(2px, -1px); }
+  60%  { transform: translate(-1px, 2px); }
+  80%  { transform: translate(3px, 0); }
+  100% { transform: translate(-2px, -1px); }
+}
+
+@keyframes lpGliChannelMagenta {
+  0%   { transform: translate(0); }
+  15%  { transform: translate(3px, -1px); }
+  35%  { transform: translate(-2px, 2px); }
+  55%  { transform: translate(1px, -2px); }
+  75%  { transform: translate(-3px, 1px); }
+  100% { transform: translate(2px, 0); }
+}
+
+/* ── Flicker class (applied via JS briefly) ── */
+.lp-gli-name.lp-gli-flicker {
+  animation: lpGliFlicker 0.15s steps(2) forwards;
+}
+
+@keyframes lpGliFlicker {
+  0%   { opacity: 1; transform: translate(0); }
+  25%  { opacity: 0.6; transform: translate(-6px, 2px) skewX(4deg); }
+  50%  { opacity: 1; transform: translate(4px, -1px) skewX(-2deg); }
+  75%  { opacity: 0.4; transform: translate(-2px, 3px) skewX(6deg); }
+  100% { opacity: 1; transform: translate(0) skewX(0); }
+}
+
+/* ── Pixel Cat (start trigger) ── */
+.lp-gli-cat {
+  position: relative;
+  z-index: 5;
+  margin-top: 48px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lpGliCatIn 0.8s ease forwards;
+  opacity: 0;
+  transition: transform 0.2s ease;
+}
+
+.lp-gli-cat:hover {
+  transform: scale(1.1);
+}
+
+.lp-gli-cat:hover .lp-gli-cat-glow {
+  opacity: 0.9;
+  transform: scale(1.3);
+}
+
+@keyframes lpGliCatIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.8); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Cat SVG */
+.lp-gli-cat-svg {
+  width: clamp(80px, 15vw, 140px);
+  height: auto;
+  color: var(--lp-gli-accent);
+  filter: drop-shadow(0 0 6px var(--lp-gli-accent))
+          drop-shadow(0 0 20px var(--lp-gli-accent2));
+  position: relative;
+  z-index: 2;
+}
+
+/* Glow behind cat */
+.lp-gli-cat-glow {
+  position: absolute;
+  width: 160%;
+  height: 160%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--lp-gli-cat-glow) 0%,
+    transparent 70%
+  );
+  opacity: 0.7;
+  z-index: 1;
+  transition: opacity 0.3s, transform 0.3s;
+  filter: blur(10px);
+}
+
+/* ── Floating Zzz ── */
+.lp-gli-z {
+  position: absolute;
+  font-family: "Courier New", "Fira Mono", monospace;
+  font-weight: 700;
+  color: var(--lp-gli-accent2);
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lp-gli-z1 {
+  font-size: 0.9rem;
+  top: -5px;
+  right: -10px;
+  animation: lpGliZFloat 2.5s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.lp-gli-z2 {
+  font-size: 0.7rem;
+  top: -18px;
+  right: -2px;
+  animation: lpGliZFloat 2.5s ease-in-out infinite;
+  animation-delay: 0.6s;
+}
+
+.lp-gli-z3 {
+  font-size: 0.55rem;
+  top: -28px;
+  right: 6px;
+  animation: lpGliZFloat 2.5s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+@keyframes lpGliZFloat {
+  0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+  20%  { opacity: 0.8; }
+  80%  { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-20px) rotate(-15deg); }
+}
+
+/* ── Horizontal glitch bar (random flicker) ── */
+.lp-gli::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--lp-gli-accent);
+  opacity: 0;
+  z-index: 10;
+  pointer-events: none;
+  animation: lpGliBar 4s infinite;
+}
+
+@keyframes lpGliBar {
+  0%, 92%   { opacity: 0; top: 50%; }
+  93%       { opacity: 0.8; top: 20%; }
+  94%       { opacity: 0; top: 20%; }
+  95%       { opacity: 0.6; top: 70%; }
+  96%       { opacity: 0; top: 70%; }
+  97%       { opacity: 0.9; top: 35%; height: 5px; }
+  98%       { opacity: 0; top: 35%; }
+  100%      { opacity: 0; top: 50%; }
+}
+
+/* ── Bottom error text ── */
+.lp-gli-cat::after {
+  content: "tap_to_wake_up";
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Courier New", "Fira Mono", monospace;
+  font-size: 0.55rem;
+  opacity: 0.3;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+  color: var(--lp-gli-accent);
+  text-transform: uppercase;
+}

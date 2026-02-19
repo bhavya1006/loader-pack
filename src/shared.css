@@ -1,0 +1,22 @@
+/* ── Shared styles used by all loader-pack variants ── */
+
+body {
+  font-family: "Geist Sans", system-ui, sans-serif;
+}
+
+/* Main content reveal (used by withLoader after any variant) */
+.lp-main {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+}
+
+.lp-main.reveal {
+  animation: lpReveal 0.9s ease forwards;
+}
+
+@keyframes lpReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
