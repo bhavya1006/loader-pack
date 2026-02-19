@@ -1,168 +1,125 @@
 # loader-pack
 
-Beautiful, animated intro/loader screens for React apps. Pick from 5 design variants (or import just the one you need) and give your portfolio, SPA, or landing page a stunning entry.
+Drop-in animated intro screens for React. One line of code, five gorgeous styles.
 
 ![npm](https://img.shields.io/npm/v/loader-pack)
 ![license](https://img.shields.io/npm/l/loader-pack)
 ![bundle size](https://img.shields.io/bundlephobia/minzip/loader-pack)
 
----
-
-## Variants
-
-| Variant | Style | Preview |
-|---------|-------|---------|
-| `classic` | Animated name reveal, multilingual marquee, date/time | Clean & cinematic |
-| `terminal` | CLI boot sequence, macOS-style title bar | Developer vibes |
-| `minimal` | Ultra-clean fade-in with bordered button | Less is more |
-| `spotlight` | Volumetric light beam with rays from corner | Dramatic & elegant |
-| `glitch` | RGB channel-split text, pixel cat, scanlines | Cyberpunk energy |
-
----
-
-## Installation
-
 ```bash
 npm install loader-pack
 ```
 
-> **Peer dependencies:** `react >=18.0.0` and `react-dom >=18.0.0`
-
-Don't forget to import the styles:
-
-```tsx
-import "loader-pack/styles";
-```
-
 ---
 
-## Quick Start
+## What does it do?
 
-### Option 1: Single component with `variant` prop
-
-The simplest way — one import, pick your variant:
+Wraps your app in a full-screen animated intro. The user sees a beautiful loading screen, taps to enter, and your content smoothly fades in. That's it — no config needed.
 
 ```tsx
 import { LoaderPack } from "loader-pack";
 import "loader-pack/styles";
 
-function App() {
+export default function App() {
   return (
-    <LoaderPack variant="glitch" name="Your Name" theme="dark">
-      {/* Your app content goes here — shown after the loader */}
-      <main>
-        <h1>Welcome to my site</h1>
-      </main>
+    <LoaderPack name="Your Name">
+      <YourApp />
     </LoaderPack>
   );
 }
 ```
 
-### Option 2: Direct import (tree-shakeable)
+Three lines. Done.
 
-Import only the variant you need — smaller bundle:
+---
+
+## Pick a style
+
+| Variant | Vibe |
+|---------|------|
+| **classic** | Scrolling multilingual marquee, animated name, date & time |
+| **terminal** | Fake CLI boot sequence with macOS-style window |
+| **minimal** | Clean fade-in — just name + enter button |
+| **spotlight** | Dramatic light beam sweeping from the corner |
+| **glitch** | Neon text with RGB split, scanlines & a sleeping pixel cat |
+
+Just pass the `variant` prop:
+
+```tsx
+<LoaderPack variant="glitch" name="Your Name">
+  <YourApp />
+</LoaderPack>
+```
+
+---
+
+## All props
+
+| Prop | Type | Default | What it does |
+|------|------|---------|--------------|
+| `name` | `string` | — | **Required.** The name shown on screen |
+| `children` | `ReactNode` | — | **Required.** Your app (shown after intro) |
+| `variant` | `"classic"` `"terminal"` `"minimal"` `"spotlight"` `"glitch"` | `"classic"` | Loader style |
+| `theme` | `"dark"` `"light"` | `"dark"` | Color scheme |
+| `sound` | `boolean` | `false` | Ambient + click sounds |
+| `ambientSoundSrc` | `string` | built-in | Your own ambient audio file |
+| `clickSoundSrc` | `string` | built-in | Your own click audio file |
+| `marqueeText` | `string` | built-in | Custom scrolling text (classic only) |
+
+---
+
+## Want a smaller bundle?
+
+Import just the variant you need — unused ones get tree-shaken out:
 
 ```tsx
 import { GlitchLoader } from "loader-pack";
 import "loader-pack/styles";
 
-function App() {
-  return (
-    <GlitchLoader name="Your Name" theme="dark">
-      <main>
-        <h1>Welcome to my site</h1>
-      </main>
-    </GlitchLoader>
-  );
-}
+<GlitchLoader name="Your Name" theme="dark">
+  <YourApp />
+</GlitchLoader>
 ```
 
-Available standalone imports: `ClassicLoader`, `TerminalLoader`, `MinimalLoader`, `SpotlightLoader`, `GlitchLoader`
+Available: `ClassicLoader` · `TerminalLoader` · `MinimalLoader` · `SpotlightLoader` · `GlitchLoader`
 
 ---
 
-## Props
+## More examples
 
-### `<LoaderPack>` props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `"classic" \| "terminal" \| "minimal" \| "spotlight" \| "glitch"` | `"classic"` | Which loader design to use |
-| `name` | `string` | **required** | The name displayed in the loader |
-| `children` | `ReactNode` | **required** | Your app content (revealed after start) |
-| `theme` | `"dark" \| "light"` | `"dark"` | Color theme |
-| `sound` | `boolean` | `false` | Enable ambient & click sound effects |
-| `ambientSoundSrc` | `string` | built-in | Custom ambient sound file path |
-| `clickSoundSrc` | `string` | built-in | Custom click sound file path |
-| `marqueeText` | `string` | built-in | Custom scrolling marquee text (classic variant) |
-
-All standalone loaders (`ClassicLoader`, etc.) accept the same props except `variant`.
-
----
-
-## Customization Examples
-
-### Dark theme (default)
+**Light theme:**
 ```tsx
-<LoaderPack variant="spotlight" name="Jane Doe" theme="dark">
+<LoaderPack variant="spotlight" name="Jane" theme="light">
   <App />
 </LoaderPack>
 ```
 
-### Light theme
+**With sound:**
 ```tsx
-<LoaderPack variant="terminal" name="Jane Doe" theme="light">
+<LoaderPack variant="classic" name="Jane" sound>
   <App />
 </LoaderPack>
 ```
 
-### With sound effects
+**Custom marquee (classic):**
 ```tsx
-<LoaderPack variant="classic" name="Jane Doe" sound>
+<LoaderPack variant="classic" name="Jane" marqueeText="React • Next.js • TypeScript •">
   <App />
 </LoaderPack>
 ```
 
-### Custom sounds
+**Custom audio:**
 ```tsx
-<LoaderPack
-  variant="minimal"
-  name="Jane Doe"
-  ambientSoundSrc="/audio/my-ambient.wav"
-  clickSoundSrc="/audio/my-click.wav"
-  sound
->
+<LoaderPack variant="minimal" name="Jane" sound ambientSoundSrc="/my-bg.wav" clickSoundSrc="/my-click.wav">
   <App />
 </LoaderPack>
 ```
-
-### Custom marquee text (classic variant)
-```tsx
-<LoaderPack
-  variant="classic"
-  name="Jane Doe"
-  marqueeText="React • TypeScript • Node.js • Next.js • GraphQL •"
->
-  <App />
-</LoaderPack>
-```
-
----
-
-## How it works
-
-1. The loader renders full-screen over your app
-2. It plays the intro animation for the chosen variant
-3. User clicks/taps the start action (button, pixel cat, etc.)
-4. The loader smoothly transitions out, revealing your `children`
-
-The `children` content is only mounted after the user clicks start, so your app code doesn't run until the intro is complete.
 
 ---
 
 ## TypeScript
 
-All types are exported:
+Fully typed. Import what you need:
 
 ```tsx
 import type { LoaderPackProps, LoaderProps, LoaderVariant } from "loader-pack";
@@ -170,9 +127,22 @@ import type { LoaderPackProps, LoaderProps, LoaderVariant } from "loader-pack";
 
 ---
 
-## Browser Support
+## How it works
 
-Works in all modern browsers (Chrome, Firefox, Safari, Edge). Uses CSS custom properties and standard React 18+ APIs.
+1. Loader renders full-screen
+2. Intro animation plays
+3. User taps the start action (button, cat, etc.)
+4. Smooth fade-out → your app appears
+
+Your `children` don't mount until the user clicks — so nothing runs before the intro finishes.
+
+---
+
+## Requirements
+
+- React 18+
+- Modern browsers (Chrome, Firefox, Safari, Edge)
+- Zero runtime dependencies
 
 ---
 

@@ -126,7 +126,10 @@
 
 /* ── Big Glitch Name (outline, not filled) ── */
 .lp-gli-name {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 5;
   font-size: clamp(2.5rem, 12vw, 7rem);
   font-weight: 900;
@@ -140,12 +143,13 @@
     0 0 30px var(--lp-gli-name-glow);
   animation: lpGliNameIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   margin: 0;
+  white-space: nowrap;
 }
 
 @keyframes lpGliNameIn {
   0% {
     opacity: 0;
-    transform: scale(1.2) translateY(20px);
+    transform: translate(-50%, -50%) scale(1.2);
     filter: blur(8px);
   }
   60% {
@@ -153,7 +157,7 @@
     filter: blur(0);
   }
   100% {
-    transform: scale(1) translateY(0);
+    transform: translate(-50%, -50%) scale(1);
     filter: blur(0);
   }
 }
@@ -216,9 +220,11 @@
 
 /* ── Pixel Cat (start trigger) ── */
 .lp-gli-cat {
-  position: relative;
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 5;
-  margin-top: 48px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -229,7 +235,7 @@
 }
 
 .lp-gli-cat:hover {
-  transform: scale(1.1);
+  transform: translateX(-50%) scale(1.1);
 }
 
 .lp-gli-cat:hover .lp-gli-cat-glow {
@@ -238,8 +244,8 @@
 }
 
 @keyframes lpGliCatIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.8); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.8); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }
 
 /* Cat SVG */

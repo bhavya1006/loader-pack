@@ -1,6 +1,6 @@
 {
   "name": "loader-pack",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Beautiful animated intro/loader screens for React — 5 variants (classic, terminal, minimal, spotlight, glitch) with dark/light themes, sound effects, and tree-shakeable imports",
   "type": "module",
   "main": "dist/loader-pack.umd.cjs",
